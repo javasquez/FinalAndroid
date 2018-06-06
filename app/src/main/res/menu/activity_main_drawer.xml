@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single"/>
+
+        <item
+            android:id="@+id/nav_clima"
+            android:icon="@drawable/ic_cloud_white_24dp"
+            android:title="@string/clima" />
+        <item
+            android:id="@+id/nav_calendario"
+            android:icon="@drawable/ic_date_range_black_24dp"
+            android:title="@string/calendario" />
+        <item
+            android:id="@+id/nav_ubicacion"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="@string/ubicacion" />
+        <item
+            android:id="@+id/nav_tareas"
+            android:icon="@drawable/ic_list_black_24dp"
+            android:title="@string/tareas" />
+
+</menu>

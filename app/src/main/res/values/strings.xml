@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Servicios PTDMA</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="home">Home</string>
+    <string name="clima">Clima</string>
+    <string name="calendario">Calendario</string>
+    <string name="ubicacion">Ubicacion</string>
+    <string name="tareas">Tareas</string>
+    <string name="title_activity_clima">Clima</string>
+    <string name="title_activity_calendario">Calendario</string>
+    <string name="title_activity_ubicacion">Ubicacion</string>
+    <string name="title_activity_tareas">Tareas</string>
+    <string name="gestion_servicios">Gestion Servicios</string>
+    <string name="voz">Voz</string>
+    <string name="mi_ubicacion_actual">Mi ubicacion actual</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!--Copiar-->
+    <string name="titlulo_pickers">Obtener fecha y hora</string>
+
+    <string name="formato_fecha">dd/mm/yyyy</string>
+    <string name="formato_hora">hh:mm</string>
+    <!--Fin copiar-->
+
+</resources>

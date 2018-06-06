@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="upc.finalandroid.ManageEventsActivity">
+
+    <EditText
+        android:id="@+id/etxt_descripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView11"
+        android:layout_alignStart="@+id/etxt_organizador"
+        android:ems="10"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="242dp" />
+
+    <EditText
+        android:id="@+id/etxt_organizador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/etxt_titulo"
+        android:layout_marginBottom="124dp"
+        android:ems="10"
+        android:inputType="textPersonName|textWebEmailAddress"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="279dp" />
+
+    <EditText
+        android:id="@+id/etxt_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ib_obtener_fecha"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="204dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/et_mostrar_fecha_picker"
+        android:layout_marginTop="62dp"
+        android:text="Fecha y hora del evento"
+        android:textSize="24sp"
+        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/et_mostrar_fecha_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/et_mostrar_hora_picker"
+        android:layout_marginTop="110dp"
+        android:ems="10"
+        android:hint="@string/formato_fecha"
+        android:inputType="date"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/et_mostrar_hora_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView10"
+        android:layout_alignTop="@+id/ib_obtener_hora"
+        android:ems="10"
+        android:hint="@string/formato_hora"
+        android:inputType="time"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_mostrar_fecha_picker" />
+
+    <ImageButton
+        android:id="@+id/ib_obtener_fecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ib_obtener_hora"
+        android:layout_alignTop="@+id/et_mostrar_fecha_picker"
+        android:src="@drawable/ic_event_white_24dp"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintLeft_toRightOf="@+id/et_mostrar_fecha_picker"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/ib_obtener_hora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="172dp"
+        android:src="@drawable/ic_access_time_white_24dp"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintLeft_toRightOf="@+id/et_mostrar_hora_picker"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_mostrar_fecha_picker"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView11"
+        android:layout_centerVertical="true"
+        android:text="Titulo:"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="11dp"
+        tools:layout_editor_absoluteY="217dp" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textView13"
+        android:layout_marginBottom="188dp"
+        android:text="Descripcion:"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.522"
+        tools:layout_editor_absoluteX="11dp" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etxt_organizador"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="18dp"
+        android:text="Organizador:"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="11dp"
+        tools:layout_editor_absoluteY="289dp" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textView11"
+        android:layout_marginBottom="75dp"
+        android:text="Duracion:"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="11dp"
+        tools:layout_editor_absoluteY="326dp" />
+
+    <EditText
+        android:id="@+id/etxt_duracion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView14"
+        android:layout_alignStart="@+id/etxt_descripcion"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="314dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView10"
+        android:layout_below="@+id/etxt_duracion"
+        android:onClick="addEvent"
+        android:text="Crear"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="426dp" />
+
+</RelativeLayout>
