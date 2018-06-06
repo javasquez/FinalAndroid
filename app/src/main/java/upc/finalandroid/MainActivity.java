@@ -840,18 +840,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mapFragment.getMapAsync(this);
 
     }
+    RelativeLayout fl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cv = (CardView) findViewById(R.id.cardview);
+        cv = (CardView) findViewById(R.id.cardViewWeather);
+        fl = (RelativeLayout) findViewById(R.id.rl);
+        fl.addView(cv);
+
+
+
+
         cv.setVisibility(View.GONE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         dbHelper = new DbHelper(this);
         mContext = getApplicationContext();
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
