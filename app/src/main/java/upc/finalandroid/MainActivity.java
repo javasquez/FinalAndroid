@@ -637,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    txvResult.setText(result.get(0));
+                    txt_query.setText(result.get(0));
                     String phrase = result.get(0);
         /*String phrase = "clima Barcelona mañana";
         String phrase = "clima Barcelona proximas horas";
@@ -678,11 +678,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }
                                 if (words[words.length - 1].equalsIgnoreCase("hoy")) {
                                     statusQuery=0;
+                                    deleteLastQuery();
+                                    dbHelper.insertLastQuert(phrase);
                                     new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
 
 
                                 } else {
                                     statusQuery=0;
+
+                                    deleteLastQuery();
+                                    dbHelper.insertLastQuert(phrase);
                                     new MainActivity.GetWeatherTomorrow().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                 }
@@ -700,10 +705,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                     if (words[words.length - 1].equalsIgnoreCase("horas")) {
                                         statusQuery=0;
+
+                                        deleteLastQuery();
+                                        dbHelper.insertLastQuert(phrase);
                                         new MainActivity.GetWeatherForecastNextHours().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                     } else {
                                         statusQuery=0;
+
+                                        deleteLastQuery();
+                                        dbHelper.insertLastQuert(phrase);
                                         new MainActivity.GetWeatherForecastNextDays().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                     }
@@ -724,6 +735,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                         }
                                         statusQuery=0;
+
+                                        deleteLastQuery();
+                                        dbHelper.insertLastQuert(phrase);
                                         new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
 
 
@@ -747,6 +761,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (words[0].equalsIgnoreCase("mostrar")) {
                                 Intent t = new Intent(MainActivity.this, TareasActivity.class);
                                 startActivity(t);
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                             }
                             if (words[0].equalsIgnoreCase("agregar")) {
                                 String task = "";
@@ -759,6 +776,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 }
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                                 dbHelper.insertNewTask(task);
                                 statusQuery=0;
                                 Toast.makeText(MainActivity.this, "Tarea creada", Toast.LENGTH_SHORT).show();
@@ -774,6 +794,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 }
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                                 dbHelper.deleteTask(task);
                                 statusQuery=0;
                                 Toast.makeText(MainActivity.this, "Tarea eliminada", Toast.LENGTH_SHORT).show();
@@ -791,6 +814,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             getLatLon();
                             cv.setVisibility(View.VISIBLE);
                             statusQuery=0;
+
+                            deleteLastQuery();
+                            dbHelper.insertLastQuert(phrase);
                         } else {
                             statusQuery=1;
                         }
@@ -804,6 +830,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 t.putExtra("loadEvents", "yes");
                                 startActivity(t);
                                 statusQuery=0;
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                             }
                             if (words[0].equalsIgnoreCase("agregar")) {
                                 String event = "";
@@ -821,6 +850,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 startActivity(f);
                                 statusQuery=0;
 
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
+
                             }
                             if (words[0].equalsIgnoreCase("eliminar") && words.length == 3) {
                                 String event = "";
@@ -833,6 +865,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 }
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                                 removeEvent(event);
                                 statusQuery=0;
                             }
@@ -916,13 +951,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    TextView txt_query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         cv = (CardView) findViewById(R.id.cardview);
-
+        dbHelper = new DbHelper(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         dbHelper = new DbHelper(this);
@@ -986,12 +1022,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        ArrayList<String> queries = dbHelper.getLastQuery();
+        txt_query = (TextView)findViewById(R.id.txt_query);
+        if(queries.isEmpty()){
+           
+            txt_query.setText("");
+        }else{
 
+            txt_query.setText(queries.get(0));
+        }
+        
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
 
+    }
+    
+    public  void deleteLastQuery(){
+        ArrayList<String> queries = dbHelper.getLastQuery();
+        //txt_query = (TextView)findViewById(R.id.txt_query);
+        if(!queries.isEmpty()){
+
+            
+            dbHelper.deleteLastQuery(dbHelper.getLastQuery().get(0));
+        }
     }
 
     @Override
