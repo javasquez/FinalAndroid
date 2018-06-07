@@ -117,57 +117,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 10);
         } else {
-            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Este dispositivo no soporta reconocimiento de voz", Toast.LENGTH_SHORT).show();
         }
 
 
     }
 
-    public void generateCardView(String data) {
-        CardView card = new CardView(mContext);
-        // Set the CardView layoutParams
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT,300
 
-        );
-
-
-
-
-        //params.setMargins(10, 50, 10, 0);
-        card.setLayoutParams(params);
-
-
-        // Set CardView corner radius
-        card.setRadius(4);
-        card.setElevation(25);
-        card.setContentPadding(25,25,25,25);
-
-
-        // Set a background color for CardView
-        card.setCardBackgroundColor(Color.WHITE);
-
-        // Set the CardView maximum elevation
-        //card.setMaxCardElevation(15);
-
-        // Set CardView elevation
-        //ccard.setCardElevation(9);
-
-        // Initialize a new TextView to put in CardView
-        TextView tv = new TextView(mContext);
-        tv.setLayoutParams(params);
-        tv.setText(data);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
-        tv.setTextColor(Color.RED);
-
-        // Put the TextView in CardView
-        card.addView(tv);
-
-        // Finally, add the CardView in root layout*/
-        mRelativeLayout.addView(card);
-
-    }
-    int xdad= 0;
     public void voiceFunctions(View view) {
 
         /*FragmentManager fragmentManager = getFragmentManager();
@@ -266,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void removeEvent(String eventTitle) {
 
         boolean exist = isEventAlreadyExist(eventTitle);
-        if (!eventTitle.isEmpty()) {
+        if (exist) {
             final String[] INSTANCE_PROJECTION = new String[]{
                     CalendarContract.Instances.EVENT_ID,      // 0
                     CalendarContract.Instances.BEGIN,         // 1
@@ -311,9 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
             Toast.makeText(MainActivity.this, eventTitle + " eliminado", Toast.LENGTH_SHORT).show();
-            //Snackbar.make(, "Jazzercise ya existe!", Snackbar.LENGTH_SHORT).show();
 
-            //showEvents(eventTitle);
         }
 
     }
@@ -583,18 +537,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int minute = weatherDay.get(Calendar.MINUTE);
 
 
-                if (nextDay == day &&  hour >= 9  && j<5) {
+                if (nextDay == day &&  hour >= 6  && j<5) {
 
                    String lastUpdate = String.format("Last Updated: %s", Common.getDateNow());
-                    String description = String.format("%s", openWeatherMap.getWeather().get(0).getDescription());
-                    String humidity = String.format("%d%%", openWeatherMap.getMain().getHumidity());
-                    String time = String.format("%s/%s", Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()), Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset()));
-                    String celsius = String.format("%.2f °C", openWeatherMap.getMain().getTemp());
+                    String description = String.format("%s", weatherTomorrow[i].getWeather().get(0).getDescription());
+                    String humidity = String.format("%d%%", weatherTomorrow[i].getMain().getHumidity());
+                    String time = String.format("%s/%s", Common.unixTimeStampToDateTime(weatherTomorrow[i].getSys().getSunrise()), Common.unixTimeStampToDateTime(weatherTomorrow[i].getSys().getSunset()));
+                    String celsius = String.format("%.2f °C", weatherTomorrow[i].getMain().getTemp());
 
                     System.out.println(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
-                    hideCards();
 
-                    txtHours.get(0).setText(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
+
+                    txtHours.get(j).setText(day+"/"+month+"/"+year+" "+hour+":"+minute + " " + description + " " + humidity + " " + time + " " + celsius);
                     j++;
                     //generateCardView(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
       /*Picasso.with(Main.this)
@@ -696,16 +650,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String phrase = "ubicacion Barcelona";
 
-        String phrase = "agregar evento exposicion el 1 de junio de 2018";
+        String phrase = "agregar evento exposicion;
         String phrase ="eliminar evento exposicion";
         String phrase = "mostrar eventos";*/
 
 
                     String words[] = phrase.split(" ");
                     String weatherCity = "";
-                    String weatherLocation = "";
-                    String weatherTime = "";
-                    int queryWeatherStatus = 0;
+                    int statusQuery=1;
+
                     if (words[0].equalsIgnoreCase("clima") && words.length >= 2) {
 
 
@@ -724,10 +677,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 }
                                 if (words[words.length - 1].equalsIgnoreCase("hoy")) {
+                                    statusQuery=0;
                                     new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
 
 
                                 } else {
+                                    statusQuery=0;
                                     new MainActivity.GetWeatherTomorrow().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                 }
@@ -744,9 +699,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     }
 
                                     if (words[words.length - 1].equalsIgnoreCase("horas")) {
+                                        statusQuery=0;
                                         new MainActivity.GetWeatherForecastNextHours().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                     } else {
+                                        statusQuery=0;
                                         new MainActivity.GetWeatherForecastNextDays().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                     }
@@ -766,13 +723,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                         }
-
+                                        statusQuery=0;
                                         new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
 
 
                                     } else {
-
-                                        txvResult.setText("Consulta invalida");
+                                        statusQuery=1;
                                     }
                                 }
 
@@ -781,7 +737,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                         } else {
-                            txvResult.setText("Consulta invalida");
+                            statusQuery=1;
                         }
 
                     }
@@ -804,6 +760,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 }
                                 dbHelper.insertNewTask(task);
+                                statusQuery=0;
                                 Toast.makeText(MainActivity.this, "Tarea creada", Toast.LENGTH_SHORT).show();
                             }
                             if (words[0].equalsIgnoreCase("eliminar")) {
@@ -818,11 +775,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 }
                                 dbHelper.deleteTask(task);
-
+                                statusQuery=0;
                                 Toast.makeText(MainActivity.this, "Tarea eliminada", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "Consulta invalida", Toast.LENGTH_SHORT).show();
+                            statusQuery=1;
+
                         }
 
                     }
@@ -832,8 +790,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             hideCards();
                             getLatLon();
                             cv.setVisibility(View.VISIBLE);
+                            statusQuery=0;
                         } else {
-                            //query invalidado
+                            statusQuery=1;
                         }
 
                     }
@@ -844,6 +803,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Intent t = new Intent(MainActivity.this, CalendarioActivity.class);
                                 t.putExtra("loadEvents", "yes");
                                 startActivity(t);
+                                statusQuery=0;
                             }
                             if (words[0].equalsIgnoreCase("agregar")) {
                                 String event = "";
@@ -859,6 +819,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Intent f = new Intent(MainActivity.this, ManageEventsActivity.class);
                                 f.putExtra("event", event);
                                 startActivity(f);
+                                statusQuery=0;
 
                             }
                             if (words[0].equalsIgnoreCase("eliminar") && words.length == 3) {
@@ -873,17 +834,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 }
                                 removeEvent(event);
-                                // f.putExtra("event_to_eliminate", event);
-                                // startActivity(f);
+                                statusQuery=0;
                             }
 
                         } else {
-
-                            Toast.makeText(MainActivity.this, "Consulta invalida", Toast.LENGTH_SHORT).show();
+                            statusQuery=1;
                         }
 
                     }
+                if(statusQuery==1){
 
+                    Toast.makeText(MainActivity.this, "Comando no reconocido", Toast.LENGTH_SHORT).show();
+
+                }
 
                 }
                 break;
@@ -953,10 +916,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void cleanTextViews(){
 
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1060,9 +1020,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
 
@@ -1093,9 +1051,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent t= new Intent(MainActivity.this,TareasActivity.class);
                 startActivity(t);
                 break;
-            // this is done, now let us go and intialise the home page.
-            // after this lets start copying the above.
-            // FOLLOW MEEEEE>>>
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

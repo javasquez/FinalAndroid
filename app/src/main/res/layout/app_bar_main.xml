@@ -178,7 +178,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 1"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -200,7 +200,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 2"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -222,7 +222,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 3"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -244,7 +244,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 4"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -266,7 +266,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 5"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -286,7 +286,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 6"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -306,7 +306,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 7"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -326,7 +326,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 8"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -347,7 +347,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 9"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -417,7 +417,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 1"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -439,7 +439,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 2"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -461,7 +461,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 3"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -483,7 +483,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 4"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
@@ -505,7 +505,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="weather 5"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:layout_weight="1"/>
 
                         <ImageView
