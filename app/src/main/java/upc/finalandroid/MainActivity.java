@@ -939,8 +939,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView imageViewToday,image_weatherTime1,image_weatherTime2,image_weatherTime3,image_weatherTime4,image_weatherTime5;
 
     ImageView image_weatherDays1,image_weatherDays2,image_weatherDays3,image_weatherDays4,image_weatherDays5,image_weatherDays6,image_weatherDays7,image_weatherDays8,image_weatherDays9;
-    ArrayList<ImageView> imagesHour;
-    ArrayList<ImageView> imagesDays;
+    ArrayList<ImageView> imagesHour = new ArrayList<ImageView>();
+    ArrayList<ImageView> imagesDays = new ArrayList<ImageView>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
