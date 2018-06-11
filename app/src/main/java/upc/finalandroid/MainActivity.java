@@ -1,27 +1,16 @@
 package upc.finalandroid;
 
 import android.Manifest;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.opengl.Visibility;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 
@@ -31,41 +20,32 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.speech.RecognizerIntent;
-import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.Frame;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -374,9 +354,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
 
 
-                    /*Picasso.with(Main.this)
-                    .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-                    .into(imageView);*/
+                    Picasso.with(MainActivity.this)
+                            .load(Common.getImage(weatherTomorrow[i].getWeather().get(0).getIcon()))
+                            .into(imagesDays.get(j));
                 }
 
 
@@ -460,10 +440,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 txtHours.get(i).setText(description + " " + celsius + " " + date + " " + hourComplete + "\n");
 
                 respuesta += description + " " + celsius + " " + date + " " + hourComplete + "\n";
-                    /*Picasso.with(Main.this)
-                    .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-                    .into(imageView);*/
-
+                Picasso.with(MainActivity.this)
+                        .load(Common.getImage(weatherTomorrow[i].getWeather().get(0).getIcon()))
+                        .into(imagesHour.get(i));
 
             }
             //generateCardView(respuesta);
@@ -551,9 +530,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     txtHours.get(j).setText(day+"/"+month+"/"+year+" "+hour+":"+minute + " " + description + " " + humidity + " " + time + " " + celsius);
                     j++;
                     //generateCardView(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
-      /*Picasso.with(Main.this)
-                    .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-                    .into(imageView);*/
+                    Picasso.with(MainActivity.this)
+                    .load(Common.getImage(weatherTomorrow[i].getWeather().get(0).getIcon()))
+                    .into(imagesHour.get(j));
                 }
 
 
@@ -622,9 +601,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //generateCardView(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
 
 
-           /*Picasso.with(Main.this)
+            Picasso.with(MainActivity.this)
                     .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-                    .into(imageView);*/
+                    .into(imageViewToday);
 
         }
     }
@@ -638,7 +617,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     txt_query.setText(result.get(0));
-                    String phrase = result.get(0);
+                    executeQuery(result.get(0));
+
+
+                }
+                break;
+        }
+    }
+
+    public void executeQuery (String phrase){
         /*String phrase = "clima Barcelona mañana";
         String phrase = "clima Barcelona proximas horas";
         String phrase = "clima Barcelona proximos dias;
@@ -655,237 +642,234 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String phrase = "mostrar eventos";*/
 
 
-                    String words[] = phrase.split(" ");
-                    String weatherCity = "";
-                    int statusQuery=1;
+        String words[] = phrase.split(" ");
+        String weatherCity = "";
+        int statusQuery=1;
 
-                    if (words[0].equalsIgnoreCase("clima") && words.length >= 2) {
-
-
-                        if (words.length >= 2) {
+        if (words[0].equalsIgnoreCase("clima") && words.length >= 2) {
 
 
-                            if ((words[words.length - 1].equalsIgnoreCase("hoy") || words[words.length - 1].equalsIgnoreCase("mañana"))) {
-
-                                for (int i = 1; i < words.length - 1; i++) {
-                                    if (i == words.length - 2) {
-                                        weatherCity += words[i];
-                                    } else {
-                                        weatherCity += words[i] + " ";
-                                    }
+            if (words.length >= 2) {
 
 
-                                }
-                                if (words[words.length - 1].equalsIgnoreCase("hoy")) {
-                                    statusQuery=0;
-                                    deleteLastQuery();
-                                    dbHelper.insertLastQuert(phrase);
-                                    new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
+                if ((words[words.length - 1].equalsIgnoreCase("hoy") || words[words.length - 1].equalsIgnoreCase("mañana"))) {
+
+                    for (int i = 1; i < words.length - 1; i++) {
+                        if (i == words.length - 2) {
+                            weatherCity += words[i];
+                        } else {
+                            weatherCity += words[i] + " ";
+                        }
 
 
-                                } else {
-                                    statusQuery=0;
+                    }
+                    if (words[words.length - 1].equalsIgnoreCase("hoy")) {
+                        statusQuery=0;
+                        deleteLastQuery();
+                        dbHelper.insertLastQuert(phrase);
+                        new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
 
-                                    deleteLastQuery();
-                                    dbHelper.insertLastQuert(phrase);
-                                    new MainActivity.GetWeatherTomorrow().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
-                                }
+                    } else {
+                        statusQuery=0;
+
+                        deleteLastQuery();
+                        dbHelper.insertLastQuert(phrase);
+                        new MainActivity.GetWeatherTomorrow().execute(Common.apiRequestForecastHoursByCity(weatherCity));
+
+                    }
+                } else {
+                    if (words[words.length - 2].contains("próxim") && (words[words.length - 1].equalsIgnoreCase("horas") || words[words.length - 1].equalsIgnoreCase("días"))) {
+                        for (int i = 1; i < words.length - 2; i++) {
+                            if (i == words.length - 3) {
+                                weatherCity += words[i];
                             } else {
-                                if (words[words.length - 2].contains("próxim") && (words[words.length - 1].equalsIgnoreCase("horas") || words[words.length - 1].equalsIgnoreCase("días"))) {
-                                    for (int i = 1; i < words.length - 2; i++) {
-                                        if (i == words.length - 3) {
-                                            weatherCity += words[i];
-                                        } else {
-                                            weatherCity += words[i] + " ";
-                                        }
-
-
-                                    }
-
-                                    if (words[words.length - 1].equalsIgnoreCase("horas")) {
-                                        statusQuery=0;
-
-                                        deleteLastQuery();
-                                        dbHelper.insertLastQuert(phrase);
-                                        new MainActivity.GetWeatherForecastNextHours().execute(Common.apiRequestForecastHoursByCity(weatherCity));
-
-                                    } else {
-                                        statusQuery=0;
-
-                                        deleteLastQuery();
-                                        dbHelper.insertLastQuert(phrase);
-                                        new MainActivity.GetWeatherForecastNextDays().execute(Common.apiRequestForecastHoursByCity(weatherCity));
-
-                                    }
-                                } else {
-
-                                    String firstLetter = String.valueOf(words[words.length - 1].charAt(0));
-                                    String firstLetterCap = String.valueOf(words[words.length - 1].charAt(0)).toUpperCase();
-
-                                    if (firstLetter.equals(firstLetterCap)) {
-
-                                        for (int i = 1; i < words.length; i++) {
-                                            if (i == words.length - 1) {
-                                                weatherCity += words[i];
-                                            } else {
-                                                weatherCity += words[i] + " ";
-                                            }
-
-
-                                        }
-                                        statusQuery=0;
-
-                                        deleteLastQuery();
-                                        dbHelper.insertLastQuert(phrase);
-                                        new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
-
-
-                                    } else {
-                                        statusQuery=1;
-                                    }
-                                }
-
-
+                                weatherCity += words[i] + " ";
                             }
 
-
-                        } else {
-                            statusQuery=1;
-                        }
-
-                    }
-                    if ((words[1].equalsIgnoreCase("tarea") || words[1].equalsIgnoreCase("tareas"))) {
-
-                        if (words.length >= 2) {
-                            if (words[0].equalsIgnoreCase("mostrar")) {
-                                Intent t = new Intent(MainActivity.this, TareasActivity.class);
-                                startActivity(t);
-
-                                deleteLastQuery();
-                                dbHelper.insertLastQuert(phrase);
-                            }
-                            if (words[0].equalsIgnoreCase("agregar")) {
-                                String task = "";
-                                for (int i = 2; i < words.length; i++) {
-                                    if (i == words.length - 1) {
-                                        task += words[i];
-                                    } else {
-                                        task += words[i] + " ";
-                                    }
-
-
-                                }
-
-                                deleteLastQuery();
-                                dbHelper.insertLastQuert(phrase);
-                                dbHelper.insertNewTask(task);
-                                statusQuery=0;
-                                Toast.makeText(MainActivity.this, "Tarea creada", Toast.LENGTH_SHORT).show();
-                            }
-                            if (words[0].equalsIgnoreCase("confirmar")) {
-                                String task = "";
-                                for (int i = 2; i < words.length; i++) {
-                                    if (i == words.length - 1) {
-                                        task += words[i];
-                                    } else {
-                                        task += words[i] + " ";
-                                    }
-
-
-                                }
-
-                                deleteLastQuery();
-                                dbHelper.insertLastQuert(phrase);
-                                dbHelper.deleteTask(task);
-                                statusQuery=0;
-                                Toast.makeText(MainActivity.this, "Tarea confirmada", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            statusQuery=1;
 
                         }
 
-                    }
-
-                    if (phrase.equalsIgnoreCase("ubicación actual")) {
-                        if (words.length == 2) {
-                            hideCards();
-                            getLatLon();
-                            cv.setVisibility(View.VISIBLE);
+                        if (words[words.length - 1].equalsIgnoreCase("horas")) {
                             statusQuery=0;
 
                             deleteLastQuery();
                             dbHelper.insertLastQuert(phrase);
+                            new MainActivity.GetWeatherForecastNextHours().execute(Common.apiRequestForecastHoursByCity(weatherCity));
+
                         } else {
-                            statusQuery=1;
+                            statusQuery=0;
+
+                            deleteLastQuery();
+                            dbHelper.insertLastQuert(phrase);
+                            new MainActivity.GetWeatherForecastNextDays().execute(Common.apiRequestForecastHoursByCity(weatherCity));
+
                         }
+                    } else {
 
-                    }
+                        String firstLetter = String.valueOf(words[words.length - 1].charAt(0));
+                        String firstLetterCap = String.valueOf(words[words.length - 1].charAt(0)).toUpperCase();
 
-                    if (words[1].contains("evento")) {
-                        if (words.length >= 2) {
-                            if (words[0].equalsIgnoreCase("mostrar") && words.length == 2) {
-                                Intent t = new Intent(MainActivity.this, CalendarioActivity.class);
-                                t.putExtra("loadEvents", "yes");
-                                startActivity(t);
-                                statusQuery=0;
+                        if (firstLetter.equals(firstLetterCap)) {
 
-                                deleteLastQuery();
-                                dbHelper.insertLastQuert(phrase);
-                            }
-                            if (words[0].equalsIgnoreCase("agregar")) {
-                                String event = "";
-                                for (int i = 2; i < words.length; i++) {
-                                    if (i == words.length - 1) {
-                                        event += words[i];
-                                    } else {
-                                        event += words[i] + " ";
-                                    }
-
-
-                                }
-                                Intent f = new Intent(MainActivity.this, ManageEventsActivity.class);
-                                f.putExtra("event", event);
-                                startActivity(f);
-                                statusQuery=0;
-
-                                deleteLastQuery();
-                                dbHelper.insertLastQuert(phrase);
-
-                            }
-                            if (words[0].equalsIgnoreCase("eliminar") && words.length == 3) {
-                                String event = "";
-                                for (int i = 2; i < words.length; i++) {
-                                    if (i == words.length - 1) {
-                                        event += words[i];
-                                    } else {
-                                        event += words[i] + " ";
-                                    }
-
-
+                            for (int i = 1; i < words.length; i++) {
+                                if (i == words.length - 1) {
+                                    weatherCity += words[i];
+                                } else {
+                                    weatherCity += words[i] + " ";
                                 }
 
-                                deleteLastQuery();
-                                dbHelper.insertLastQuert(phrase);
-                                removeEvent(event);
-                                statusQuery=0;
+
                             }
+                            statusQuery=0;
+
+                            deleteLastQuery();
+                            dbHelper.insertLastQuert(phrase);
+                            new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
+
 
                         } else {
                             statusQuery=1;
                         }
-
                     }
-                if(statusQuery==1){
 
-                    Toast.makeText(MainActivity.this, "Comando no reconocido", Toast.LENGTH_SHORT).show();
 
                 }
 
-                }
-                break;
+
+            } else {
+                statusQuery=1;
+            }
+
         }
+        if ((words[1].equalsIgnoreCase("tarea") || words[1].equalsIgnoreCase("tareas"))) {
+
+            if (words.length >= 2) {
+                if (words[0].equalsIgnoreCase("mostrar")) {
+                    Intent t = new Intent(MainActivity.this, TareasActivity.class);
+                    startActivity(t);
+
+                    deleteLastQuery();
+                    dbHelper.insertLastQuert(phrase);
+                }
+                if (words[0].equalsIgnoreCase("agregar")) {
+                    String task = "";
+                    for (int i = 2; i < words.length; i++) {
+                        if (i == words.length - 1) {
+                            task += words[i];
+                        } else {
+                            task += words[i] + " ";
+                        }
+
+
+                    }
+
+                    deleteLastQuery();
+                    dbHelper.insertLastQuert(phrase);
+                    dbHelper.insertNewTask(task);
+                    statusQuery=0;
+                    Toast.makeText(MainActivity.this, "Tarea creada", Toast.LENGTH_SHORT).show();
+                }
+                if (words[0].equalsIgnoreCase("confirmar")) {
+                    String task = "";
+                    for (int i = 2; i < words.length; i++) {
+                        if (i == words.length - 1) {
+                            task += words[i];
+                        } else {
+                            task += words[i] + " ";
+                        }
+
+
+                    }
+
+                    deleteLastQuery();
+                    dbHelper.insertLastQuert(phrase);
+                    dbHelper.deleteTask(task);
+                    statusQuery=0;
+                    Toast.makeText(MainActivity.this, "Tarea confirmada", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                statusQuery=1;
+
+            }
+
+        }
+
+        if (phrase.equalsIgnoreCase("ubicación actual")) {
+            if (words.length == 2) {
+                hideCards();
+                getLatLon();
+                cv.setVisibility(View.VISIBLE);
+                statusQuery=0;
+
+                deleteLastQuery();
+                dbHelper.insertLastQuert(phrase);
+            } else {
+                statusQuery=1;
+            }
+
+        }
+
+        if (words[1].contains("evento")) {
+            if (words.length >= 2) {
+                if (words[0].equalsIgnoreCase("mostrar") && words.length == 2) {
+                    Intent t = new Intent(MainActivity.this, CalendarioActivity.class);
+                    t.putExtra("loadEvents", "yes");
+                    startActivity(t);
+                    statusQuery=0;
+
+                    deleteLastQuery();
+                    dbHelper.insertLastQuert(phrase);
+                }
+                if (words[0].equalsIgnoreCase("agregar")) {
+                    String event = "";
+                    for (int i = 2; i < words.length; i++) {
+                        if (i == words.length - 1) {
+                            event += words[i];
+                        } else {
+                            event += words[i] + " ";
+                        }
+
+
+                    }
+                    Intent f = new Intent(MainActivity.this, ManageEventsActivity.class);
+                    f.putExtra("event", event);
+                    startActivity(f);
+                    statusQuery=0;
+
+                    deleteLastQuery();
+                    dbHelper.insertLastQuert(phrase);
+
+                }
+                if (words[0].equalsIgnoreCase("eliminar") && words.length == 3) {
+                    String event = "";
+                    for (int i = 2; i < words.length; i++) {
+                        if (i == words.length - 1) {
+                            event += words[i];
+                        } else {
+                            event += words[i] + " ";
+                        }
+
+
+                    }
+
+                    deleteLastQuery();
+                    dbHelper.insertLastQuert(phrase);
+                    removeEvent(event);
+                    statusQuery=0;
+                }
+
+            } else {
+                statusQuery=1;
+            }
+
+        }
+        if(statusQuery==1){
+
+            Toast.makeText(MainActivity.this, "Comando no reconocido", Toast.LENGTH_SHORT).show();
+
+        }
+
     }
 
 
@@ -952,6 +936,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     TextView txt_query;
+    ImageView imageViewToday,image_weatherTime1,image_weatherTime2,image_weatherTime3,image_weatherTime4,image_weatherTime5;
+
+    ImageView image_weatherDays1,image_weatherDays2,image_weatherDays3,image_weatherDays4,image_weatherDays5,image_weatherDays6,image_weatherDays7,image_weatherDays8,image_weatherDays9;
+    ArrayList<ImageView> imagesHour;
+    ArrayList<ImageView> imagesDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -969,6 +958,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         txt_humidityT=(TextView) findViewById(R.id.txt_humidiy);
         txt_timeT=(TextView) findViewById(R.id.txt_time);
         txt_celsiusT=(TextView) findViewById(R.id.txt_gradosC);
+
+        imageViewToday = (ImageView) findViewById(R.id.imageViewToday);
+
+        image_weatherTime1 = (ImageView) findViewById(R.id.image_weatherTime1);
+        imagesHour.add(image_weatherTime1);
+        image_weatherTime2 = (ImageView) findViewById(R.id.image_weatherTime2);
+        imagesHour.add(image_weatherTime2);
+        image_weatherTime3 = (ImageView) findViewById(R.id.image_weatherTime3);
+        imagesHour.add(image_weatherTime3);
+        image_weatherTime4 = (ImageView) findViewById(R.id.image_weatherTime4);
+        imagesHour.add(image_weatherTime4);
+        image_weatherTime5 = (ImageView) findViewById(R.id.image_weatherTime5);
+        imagesHour.add(image_weatherTime5);
+
+        image_weatherDays1 = (ImageView) findViewById(R.id.image_weatherDays1);
+        imagesDays.add(image_weatherDays1);
+        image_weatherDays2 = (ImageView) findViewById(R.id.image_weatherDays2);
+        imagesDays.add(image_weatherDays2);
+        image_weatherDays3 = (ImageView) findViewById(R.id.image_weatherDays3);
+        imagesDays.add(image_weatherDays3);
+        image_weatherDays4 = (ImageView) findViewById(R.id.image_weatherDays4);
+        imagesDays.add(image_weatherDays4);
+        image_weatherDays5 = (ImageView) findViewById(R.id.image_weatherDays5);
+        imagesDays.add(image_weatherDays5);
+        image_weatherDays6 = (ImageView) findViewById(R.id.image_weatherDays6);
+        imagesDays.add(image_weatherDays6);
+        image_weatherDays7 = (ImageView) findViewById(R.id.image_weatherDays7);
+        imagesDays.add(image_weatherDays7);
+        image_weatherDays8 = (ImageView) findViewById(R.id.image_weatherDays8);
+        imagesDays.add(image_weatherDays8);
+        image_weatherDays9 = (ImageView) findViewById(R.id.image_weatherDays9);
+        imagesDays.add(image_weatherDays9);
+
+
+
+
 
         txt_cityH=(TextView) findViewById(R.id.txt_cityDT3);
 
@@ -1036,6 +1061,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
+    }
+
+    public void executeLastQuery(View view){
+
+        executeQuery(txt_query.getText().toString());
 
     }
     

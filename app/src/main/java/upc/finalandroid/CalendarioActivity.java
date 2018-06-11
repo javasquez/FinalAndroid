@@ -110,9 +110,6 @@ public class CalendarioActivity extends AppCompatActivity {
 
         switch(item.getItemId()) {
 
-            case R.id.edit:
-                // edit stuff here
-                return true;
             case R.id.delete:
                 removeEvent(arregloNombreEvento[1].trim());
                 return true;

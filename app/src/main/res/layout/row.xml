@@ -13,7 +13,7 @@
 
     <Button
         android:id="@+id/btnDelete"
-        android:text="Eliminar"
+        android:text="Confirmar"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
