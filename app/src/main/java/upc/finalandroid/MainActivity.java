@@ -1,11 +1,14 @@
 package upc.finalandroid;
 
 import android.Manifest;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.opengl.Visibility;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -83,6 +86,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
     WeatherOverview weatherOverview = new WeatherOverview();
     private Context mContext;
+    CardView cardviewCurretTime, cardviewNextHours, cardviewNextDays;
+
+    TextView txt_cityT, txt_descriptionT, txt_humidityT, txt_timeT, txt_celsiusT;
+    
+    TextView txt_cityH, txt_weatherT1,txt_weatherT2,txt_weatherT3,txt_weatherT4,txt_weatherT5;
+    ArrayList<TextView> txtHours;
+    ArrayList<TextView> txtDays;
+
+
+    TextView txt_cityD, txt_weatherD1,txt_weatherD2,txt_weatherD3,txt_weatherD4,txt_weatherD5,txt_weatherD6,txt_weatherD7,txt_weatherD8,txt_weatherD9;
+
 
     RelativeLayout mRelativeLayout;
     CardView cv;
@@ -103,60 +117,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 10);
         } else {
-            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Este dispositivo no soporta reconocimiento de voz", Toast.LENGTH_SHORT).show();
         }
 
 
     }
 
-    public void generateCardView(String data) {
-        CardView card = new CardView(mContext);
-        // Set the CardView layoutParams
-        DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
-        );
-        params.setMargins(10, 50, 10, 0);
-        card.setLayoutParams(params);
-
-
-        // Set CardView corner radius
-        card.setRadius(9);
-
-
-        // Set cardView content padding
-        card.setContentPadding(15, 15, 15, 15);
-
-        // Set a background color for CardView
-        card.setCardBackgroundColor(Color.WHITE);
-
-        // Set the CardView maximum elevation
-        card.setMaxCardElevation(15);
-
-        // Set CardView elevation
-        card.setCardElevation(9);
-
-        // Initialize a new TextView to put in CardView
-        TextView tv = new TextView(mContext);
-        tv.setLayoutParams(params);
-        tv.setText(data);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
-        tv.setTextColor(Color.RED);
-
-        // Put the TextView in CardView
-        card.addView(tv);
-
-        // Finally, add the CardView in root layout*/
-        mRelativeLayout.addView(card);
-
-    }
 
     public void voiceFunctions(View view) {
 
-        cv.setVisibility(View.VISIBLE);
-        getLatLon();
+        /*FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        String phrase = "clima Barcelona próximos días";
+        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);*//*
+        MapsActivity map = new MapsActivity();
+        fragmentTransaction.replace(R.id.flMap, map);
+        fragmentTransaction.commit();*/
+
+
+
+
+
+        //String phrase = "clima Barcelona próximos días";
 
        /*String phrase = "clima Barcelona mañana";
         String phrase = "clima Barcelona proximas horas";
@@ -172,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String phrase = "agregar evento exposicion el 1 de junio de 2018";
         String phrase ="eliminar evento exposicion";
         String phrase = "mostrar eventos";*/
-
+        /*
 
         String words[] = phrase.split(" ");
         String weatherCity = "";
@@ -197,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new MainActivity.GetWeatherForecastNextDays().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
             }
-        }
+        }*/
     }
 
     DbHelper dbHelper;
@@ -238,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void removeEvent(String eventTitle) {
 
         boolean exist = isEventAlreadyExist(eventTitle);
-        if (!eventTitle.isEmpty()) {
+        if (exist) {
             final String[] INSTANCE_PROJECTION = new String[]{
                     CalendarContract.Instances.EVENT_ID,      // 0
                     CalendarContract.Instances.BEGIN,         // 1
@@ -283,9 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
             Toast.makeText(MainActivity.this, eventTitle + " eliminado", Toast.LENGTH_SHORT).show();
-            //Snackbar.make(, "Jazzercise ya existe!", Snackbar.LENGTH_SHORT).show();
 
-            //showEvents(eventTitle);
         }
 
     }
@@ -337,30 +319,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             weatherOverview = gson.fromJson(s, mType);
             pd.dismiss();
             Calendar currentDate = Calendar.getInstance();
+            int currentDay= currentDate.get(Calendar.DAY_OF_MONTH);
+
+
             currentDate.add(Calendar.DAY_OF_MONTH, 3);
 
             int limitDay = currentDate.get(Calendar.DAY_OF_MONTH);
 
             OpenWeatherMap[] weatherTomorrow = weatherOverview.getList();
+
+            hideCards();
+            cardviewNextDays.setVisibility(View.VISIBLE);
             String city = String.format("%s", weatherOverview.getCity().getName());
             System.out.println(city);
+            txt_cityD.setText(city);
             String respuesta = city;
 
+            int j = 0;
             for (int i = 0; i < weatherTomorrow.length; i++) {
 
                 Date dateWeather = new Date(weatherTomorrow[i].getDt() * 1000);
+
                 Calendar weatherDay = Calendar.getInstance();
                 weatherDay.setTime(dateWeather);
+                int day = weatherDay.get(Calendar.DAY_OF_MONTH);
+                if(day==7 ){
+                    String a= "";
+                }
+                int hour = weatherDay.get(Calendar.HOUR_OF_DAY);
+                if(day==7 && hour ==9){
 
-                if (weatherDay.get(Calendar.DAY_OF_MONTH) <= limitDay && (weatherDay.get(Calendar.HOUR_OF_DAY) == 9 || weatherDay.get(Calendar.HOUR_OF_DAY) == 15 || weatherDay.get(Calendar.HOUR_OF_DAY) == 18)) {
+                    String a= "";
 
-                    String description = String.format("%s", weatherTomorrow[i].getWeather().get(0).getDescription());
-                    String celsius = String.format("%.2f °C", weatherTomorrow[i].getMain().getTemp());
-                    String date = weatherDay.get(Calendar.DAY_OF_MONTH) + "/" + weatherDay.get(Calendar.MONTH) + "/" + weatherDay.get(Calendar.YEAR);
+                }
+                int month = weatherDay.get(Calendar.MONTH);
+                int year = weatherDay.get(Calendar.YEAR);
+                int minute = weatherDay.get(Calendar.MINUTE);
 
-                    String hour = weatherDay.get(Calendar.HOUR_OF_DAY) + ":" + weatherDay.get(Calendar.MINUTE);
-                    System.out.println(description + " " + celsius + " " + date + " " + hour + "\n");
-                    respuesta += description + " " + celsius + " " + date + " " + hour + "\n";
+                if ( day<= limitDay && (hour>= 10 && hour <= 17) && j <= 8) {
+
+                    if ( day>currentDay ){
+
+                        String description = String.format("%s", weatherTomorrow[i].getWeather().get(0).getDescription());
+                        String celsius = String.format("%.2f °C", weatherTomorrow[i].getMain().getTemp());
+                        String date = day + "/" + month + "/" + year;
+
+                        String hourComplete = hour+ ":" + minute;
+                        System.out.println(description + " " + celsius + " " + date + " " + hourComplete + "\n");
+                        respuesta += description + " " + celsius + " " + date + " " + hourComplete + "\n";
+
+                        txtDays.get(j).setText(description + " " + celsius + " " + date + " " + hourComplete );
+                        j++;
+
+                    }
+
+
                     /*Picasso.with(Main.this)
                     .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                     .into(imageView);*/
@@ -368,7 +381,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             }
-            generateCardView(respuesta);
+
+            //generateCardView(respuesta);
 
         }
     }
@@ -415,6 +429,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             OpenWeatherMap[] weatherTomorrow = weatherOverview.getList();
             String city = String.format("%s", weatherOverview.getCity().getName());
+
+            hideCards();
+            cardviewNextHours.setVisibility(View.VISIBLE);
+            txt_cityH.setText(city);
             System.out.println(city + "\n");
             String respuesta = city + "\n";
 
@@ -423,22 +441,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Date dateWeather = new Date(weatherTomorrow[i].getDt() * 1000);
                 Calendar weatherDay = Calendar.getInstance();
                 weatherDay.setTime(dateWeather);
+                int day = weatherDay.get(Calendar.DAY_OF_MONTH);
+                int hour = weatherDay.get(Calendar.HOUR_OF_DAY);
+                int month = weatherDay.get(Calendar.MONTH);
+                int year = weatherDay.get(Calendar.YEAR);
+                int minute = weatherDay.get(Calendar.MINUTE);
 
 
                 String description = String.format("%s", weatherTomorrow[i].getWeather().get(0).getDescription());
                 String celsius = String.format("%.2f °C", weatherTomorrow[i].getMain().getTemp());
-                String date = weatherDay.get(Calendar.DAY_OF_MONTH) + "/" + weatherDay.get(Calendar.MONTH) + "/" + weatherDay.get(Calendar.YEAR);
+                String date = day + "/" + month + "/" + year;
 
-                String hour = weatherDay.get(Calendar.HOUR_OF_DAY) + ":" + weatherDay.get(Calendar.MINUTE);
-                System.out.println(description + " " + celsius + " " + date + " " + hour + "\n");
-                respuesta += description + " " + celsius + " " + date + " " + hour + "\n";
+                String hourComplete = hour + ":" + minute;
+                System.out.println(description + " " + celsius + " " + date + " " + hourComplete + "\n");
+
+
+
+                txtHours.get(i).setText(description + " " + celsius + " " + date + " " + hourComplete + "\n");
+
+                respuesta += description + " " + celsius + " " + date + " " + hourComplete + "\n";
                     /*Picasso.with(Main.this)
                     .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                     .into(imageView);*/
 
 
             }
-            generateCardView(respuesta);
+            //generateCardView(respuesta);
 
 
         }
@@ -489,31 +517,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             OpenWeatherMap[] weatherTomorrow = weatherOverview.getList();
             String city = String.format("%s", weatherOverview.getCity().getName());
-            String date = currentDate.get(Calendar.DAY_OF_MONTH) + "/" + currentDate.get(Calendar.MONTH) + "/" + currentDate.get(Calendar.YEAR);
-            String respuesta = city + " " + date + "\n";
-            System.out.println(city + " " + date + "\n");
+            hideCards();
+
+
+            cardviewNextHours.setVisibility(View.VISIBLE);
+            txt_cityH.setText(city);
+            int j = 0;
             for (int i = 0; i < weatherTomorrow.length; i++) {
 
                 Date dateWeather = new Date(weatherTomorrow[i].getDt() * 1000);
                 Calendar weatherDay = Calendar.getInstance();
                 weatherDay.setTime(dateWeather);
 
-                if (nextDay == weatherDay.get(Calendar.DAY_OF_MONTH) && (weatherDay.get(Calendar.HOUR_OF_DAY) == 0 || weatherDay.get(Calendar.HOUR_OF_DAY) == 6 || weatherDay.get(Calendar.HOUR_OF_DAY) == 9 || weatherDay.get(Calendar.HOUR_OF_DAY) == 12 || weatherDay.get(Calendar.HOUR_OF_DAY) == 15 || weatherDay.get(Calendar.HOUR_OF_DAY) == 18 || weatherDay.get(Calendar.HOUR_OF_DAY) == 21)) {
 
+                int day = weatherDay.get(Calendar.DAY_OF_MONTH);
+                int hour = weatherDay.get(Calendar.HOUR_OF_DAY);
+                int month = weatherDay.get(Calendar.MONTH);
+                int year = weatherDay.get(Calendar.YEAR);
+                int minute = weatherDay.get(Calendar.MINUTE);
+
+
+                if (nextDay == day &&  hour >= 6  && j<5) {
+
+                   String lastUpdate = String.format("Last Updated: %s", Common.getDateNow());
                     String description = String.format("%s", weatherTomorrow[i].getWeather().get(0).getDescription());
+                    String humidity = String.format("%d%%", weatherTomorrow[i].getMain().getHumidity());
+                    String time = String.format("%s/%s", Common.unixTimeStampToDateTime(weatherTomorrow[i].getSys().getSunrise()), Common.unixTimeStampToDateTime(weatherTomorrow[i].getSys().getSunset()));
                     String celsius = String.format("%.2f °C", weatherTomorrow[i].getMain().getTemp());
-                    String hour = weatherDay.get(Calendar.HOUR_OF_DAY) + ":" + weatherDay.get(Calendar.MINUTE);
-                    System.out.println(description + " " + celsius + " " + hour + "\n");
-                    respuesta += description + " " + celsius + " " + hour + "\n";
 
-                    /*Picasso.with(Main.this)
+                    System.out.println(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
+
+
+                    txtHours.get(j).setText(day+"/"+month+"/"+year+" "+hour+":"+minute + " " + description + " " + humidity + " " + time + " " + celsius);
+                    j++;
+                    //generateCardView(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
+      /*Picasso.with(Main.this)
                     .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                     .into(imageView);*/
                 }
 
 
             }
-            generateCardView(respuesta);
+            //generateCardView(respuesta);
 
 
         }
@@ -565,8 +610,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String time = String.format("%s/%s", Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()), Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset()));
             String celsius = String.format("%.2f °C", openWeatherMap.getMain().getTemp());
 
+            hideCards();
+            cardviewCurretTime.setVisibility(View.VISIBLE);
+            txt_cityT.setText(city);
+            txt_descriptionT.setText(description);
+            txt_humidityT.setText(humidity);
+            txt_timeT.setText(time);
+            txt_celsiusT.setText(celsius);
+
             System.out.println(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
-            generateCardView(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
+            //generateCardView(city + " " + lastUpdate + " " + description + " " + humidity + " " + time + " " + celsius);
+
 
            /*Picasso.with(Main.this)
                     .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
@@ -583,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    txvResult.setText(result.get(0));
+                    txt_query.setText(result.get(0));
                     String phrase = result.get(0);
         /*String phrase = "clima Barcelona mañana";
         String phrase = "clima Barcelona proximas horas";
@@ -596,16 +650,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String phrase = "ubicacion Barcelona";
 
-        String phrase = "agregar evento exposicion el 1 de junio de 2018";
+        String phrase = "agregar evento exposicion;
         String phrase ="eliminar evento exposicion";
         String phrase = "mostrar eventos";*/
 
 
                     String words[] = phrase.split(" ");
                     String weatherCity = "";
-                    String weatherLocation = "";
-                    String weatherTime = "";
-                    int queryWeatherStatus = 0;
+                    int statusQuery=1;
+
                     if (words[0].equalsIgnoreCase("clima") && words.length >= 2) {
 
 
@@ -624,10 +677,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 }
                                 if (words[words.length - 1].equalsIgnoreCase("hoy")) {
+                                    statusQuery=0;
+                                    deleteLastQuery();
+                                    dbHelper.insertLastQuert(phrase);
                                     new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
 
 
                                 } else {
+                                    statusQuery=0;
+
+                                    deleteLastQuery();
+                                    dbHelper.insertLastQuert(phrase);
                                     new MainActivity.GetWeatherTomorrow().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                 }
@@ -644,9 +704,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     }
 
                                     if (words[words.length - 1].equalsIgnoreCase("horas")) {
+                                        statusQuery=0;
+
+                                        deleteLastQuery();
+                                        dbHelper.insertLastQuert(phrase);
                                         new MainActivity.GetWeatherForecastNextHours().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                     } else {
+                                        statusQuery=0;
+
+                                        deleteLastQuery();
+                                        dbHelper.insertLastQuert(phrase);
                                         new MainActivity.GetWeatherForecastNextDays().execute(Common.apiRequestForecastHoursByCity(weatherCity));
 
                                     }
@@ -666,13 +734,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                         }
+                                        statusQuery=0;
 
+                                        deleteLastQuery();
+                                        dbHelper.insertLastQuert(phrase);
                                         new MainActivity.GetWeather().execute(Common.apiRequestByCity(weatherCity));
 
 
                                     } else {
-
-                                        txvResult.setText("Consulta invalida");
+                                        statusQuery=1;
                                     }
                                 }
 
@@ -681,7 +751,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                         } else {
-                            txvResult.setText("Consulta invalida");
+                            statusQuery=1;
                         }
 
                     }
@@ -691,6 +761,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (words[0].equalsIgnoreCase("mostrar")) {
                                 Intent t = new Intent(MainActivity.this, TareasActivity.class);
                                 startActivity(t);
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                             }
                             if (words[0].equalsIgnoreCase("agregar")) {
                                 String task = "";
@@ -703,10 +776,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 }
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                                 dbHelper.insertNewTask(task);
+                                statusQuery=0;
                                 Toast.makeText(MainActivity.this, "Tarea creada", Toast.LENGTH_SHORT).show();
                             }
-                            if (words[0].equalsIgnoreCase("eliminar")) {
+                            if (words[0].equalsIgnoreCase("confirmar")) {
                                 String task = "";
                                 for (int i = 2; i < words.length; i++) {
                                     if (i == words.length - 1) {
@@ -717,21 +794,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 }
-                                dbHelper.deleteTask(task);
 
-                                Toast.makeText(MainActivity.this, "Tarea eliminada", Toast.LENGTH_SHORT).show();
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
+                                dbHelper.deleteTask(task);
+                                statusQuery=0;
+                                Toast.makeText(MainActivity.this, "Tarea confirmada", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "Consulta invalida", Toast.LENGTH_SHORT).show();
+                            statusQuery=1;
+
                         }
 
                     }
 
-                    if (phrase.equalsIgnoreCase("ubicacion actual")) {
+                    if (phrase.equalsIgnoreCase("ubicación actual")) {
                         if (words.length == 2) {
-                            //query obtener ubicacion ciudad
+                            hideCards();
+                            getLatLon();
+                            cv.setVisibility(View.VISIBLE);
+                            statusQuery=0;
+
+                            deleteLastQuery();
+                            dbHelper.insertLastQuert(phrase);
                         } else {
-                            //query invalidado
+                            statusQuery=1;
                         }
 
                     }
@@ -742,6 +829,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Intent t = new Intent(MainActivity.this, CalendarioActivity.class);
                                 t.putExtra("loadEvents", "yes");
                                 startActivity(t);
+                                statusQuery=0;
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                             }
                             if (words[0].equalsIgnoreCase("agregar")) {
                                 String event = "";
@@ -757,6 +848,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Intent f = new Intent(MainActivity.this, ManageEventsActivity.class);
                                 f.putExtra("event", event);
                                 startActivity(f);
+                                statusQuery=0;
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
 
                             }
                             if (words[0].equalsIgnoreCase("eliminar") && words.length == 3) {
@@ -770,18 +865,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 }
+
+                                deleteLastQuery();
+                                dbHelper.insertLastQuert(phrase);
                                 removeEvent(event);
-                                // f.putExtra("event_to_eliminate", event);
-                                // startActivity(f);
+                                statusQuery=0;
                             }
 
                         } else {
-
-                            Toast.makeText(MainActivity.this, "Consulta invalida", Toast.LENGTH_SHORT).show();
+                            statusQuery=1;
                         }
 
                     }
+                if(statusQuery==1){
 
+                    Toast.makeText(MainActivity.this, "Comando no reconocido", Toast.LENGTH_SHORT).show();
+
+                }
 
                 }
                 break;
@@ -840,25 +940,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mapFragment.getMapAsync(this);
 
     }
-    RelativeLayout fl;
+    public void hideCards(){
+        cardviewCurretTime.setVisibility(View.GONE);
+
+        cardviewNextHours.setVisibility(View.GONE);
+
+        cardviewNextDays.setVisibility(View.GONE);
+
+        cv.setVisibility(View.GONE);
+
+    }
+
+    TextView txt_query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cv = (CardView) findViewById(R.id.cardViewWeather);
-        fl = (RelativeLayout) findViewById(R.id.rl);
-        fl.addView(cv);
-
-
-
-
-        cv.setVisibility(View.GONE);
+        cv = (CardView) findViewById(R.id.cardview);
+        dbHelper = new DbHelper(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         dbHelper = new DbHelper(this);
         mContext = getApplicationContext();
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
+        txt_cityT =(TextView) findViewById(R.id.txt_cityDT1);
+        txt_descriptionT=(TextView) findViewById(R.id.txt_description);
+        txt_humidityT=(TextView) findViewById(R.id.txt_humidiy);
+        txt_timeT=(TextView) findViewById(R.id.txt_time);
+        txt_celsiusT=(TextView) findViewById(R.id.txt_gradosC);
+
+        txt_cityH=(TextView) findViewById(R.id.txt_cityDT3);
+
+        txtHours = new ArrayList<TextView>() ;
+        txtDays = new ArrayList<TextView> ();
+
+        txt_weatherT1=(TextView) findViewById(R.id.txt_weatherTime1);
+        txtHours.add(txt_weatherT1);
+        txt_weatherT2=(TextView) findViewById(R.id.txt_weatherTime2);
+        txtHours.add(txt_weatherT2);
+        txt_weatherT3=(TextView) findViewById(R.id.txt_weatherTime3);
+        txtHours.add(txt_weatherT3);
+        txt_weatherT4=(TextView) findViewById(R.id.txt_weatherTime4);
+        txtHours.add(txt_weatherT4);
+        txt_weatherT5=(TextView) findViewById(R.id.txt_weatherTime5);
+        txtHours.add(txt_weatherT5);
+
+        txt_cityD=(TextView) findViewById(R.id.txt_cityDT2);
+        txt_weatherD1=(TextView) findViewById(R.id.txt_weatherDays1);
+        txtDays.add(txt_weatherD1);
+        txt_weatherD2=(TextView) findViewById(R.id.txt_weatherDays2);
+        txtDays.add(txt_weatherD2);
+        txt_weatherD3=(TextView) findViewById(R.id.txt_weatherDays3);
+        txtDays.add(txt_weatherD3);
+        txt_weatherD4=(TextView) findViewById(R.id.txt_weatherDays4);
+        txtDays.add(txt_weatherD4);
+        txt_weatherD5=(TextView) findViewById(R.id.txt_weatherDays5);
+        txtDays.add(txt_weatherD5);
+        txt_weatherD6=(TextView) findViewById(R.id.txt_weatherDays6);
+        txtDays.add(txt_weatherD6);
+        txt_weatherD7=(TextView) findViewById(R.id.txt_weatherDays7);
+        txtDays.add(txt_weatherD7);
+        txt_weatherD8=(TextView) findViewById(R.id.txt_weatherDays8);
+        txtDays.add(txt_weatherD8);
+        txt_weatherD9=(TextView) findViewById(R.id.txt_weatherDays9);
+        txtDays.add(txt_weatherD9);
+
+
+        cardviewCurretTime=(CardView)findViewById(R.id.cardviewTodayTomo);
+        cardviewNextHours=(CardView)findViewById(R.id.cardviewHours);
+        cardviewNextDays=(CardView)findViewById(R.id.cardviewDays);
+
+        hideCards();
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -868,12 +1022,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        ArrayList<String> queries = dbHelper.getLastQuery();
+        txt_query = (TextView)findViewById(R.id.txt_query);
+        if(queries.isEmpty()){
+           
+            txt_query.setText("");
+        }else{
 
+            txt_query.setText(queries.get(0));
+        }
+        
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
 
+    }
+    
+    public  void deleteLastQuery(){
+        ArrayList<String> queries = dbHelper.getLastQuery();
+        //txt_query = (TextView)findViewById(R.id.txt_query);
+        if(!queries.isEmpty()){
+
+            
+            dbHelper.deleteLastQuery(dbHelper.getLastQuery().get(0));
+        }
     }
 
     @Override
@@ -902,9 +1075,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
 
@@ -935,9 +1106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent t= new Intent(MainActivity.this,TareasActivity.class);
                 startActivity(t);
                 break;
-            // this is done, now let us go and intialise the home page.
-            // after this lets start copying the above.
-            // FOLLOW MEEEEE>>>
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

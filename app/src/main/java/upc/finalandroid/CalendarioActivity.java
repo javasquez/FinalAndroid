@@ -511,39 +511,26 @@ public class CalendarioActivity extends AppCompatActivity {
     }
 
 
-    private void updateEvent(long eventID) {
-        ContentResolver cr = getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.TITLE, "Kickboxing");
-        Uri updateUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-        int rows = getContentResolver().update(updateUri, values, null, null);
-        Log.i("Calendar", "Rows updated: " + rows);
-    }
-
-    private void deleteEvent(long eventID) {
-        Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-        int rows = getContentResolver().delete(deleteUri, null, null);
-        Log.i("Calendar", "Rows deleted: " + rows);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CALENDAR: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                    readEvent();
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+
+                    Toast.makeText(CalendarioActivity.this, "La funcionalidad depende de este permiso", Toast.LENGTH_SHORT).show();
+
                 }
                 return;
             }
             case MY_PERMISSIONS_REQUEST_WRITE_CALENDAR: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    createEvent();
-//                    addEvent();
+
                 } else {
+                    Toast.makeText(CalendarioActivity.this, "La funcionalidad depende de este permiso", Toast.LENGTH_SHORT).show();
+
                 }
                 return;
             }

@@ -41,13 +41,8 @@ public class ClimaActivity extends AppCompatActivity {
     Button btn_calcular;
     EditText eLat, eLon;
 
-    RelativeLayout mRelativeLayout;
-    private Button mButton;
-    LocationManager locationManager;
-    String provider;
-    static double lat, lng;
+
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
-    int MY_PERMISSION = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +79,7 @@ public class ClimaActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Intent x= new Intent(ClimaActivity.this,MapsActivity.class);
-                startActivity(x);
+
 
             }
         });
