@@ -783,7 +783,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 statusQuery=0;
                                 Toast.makeText(MainActivity.this, "Tarea creada", Toast.LENGTH_SHORT).show();
                             }
-                            if (words[0].equalsIgnoreCase("eliminar")) {
+                            if (words[0].equalsIgnoreCase("confirmar")) {
                                 String task = "";
                                 for (int i = 2; i < words.length; i++) {
                                     if (i == words.length - 1) {
@@ -799,7 +799,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 dbHelper.insertLastQuert(phrase);
                                 dbHelper.deleteTask(task);
                                 statusQuery=0;
-                                Toast.makeText(MainActivity.this, "Tarea eliminada", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Tarea confirmada", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             statusQuery=1;
